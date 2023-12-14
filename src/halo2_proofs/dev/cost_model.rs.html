@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `halo2_proofs/src/dev/cost_model.rs`."><title>cost_model.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-e883e87179a81222.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="halo2_proofs" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0-nightly (21cce21d8 2023-12-11)" data-channel="nightly" data-search-js="search-2da88d4fc6a75ee8.js" data-settings-js="settings-fe03fdc259827cd2.js" ><script src="../../../static.files/storage-bc37acceda91d44a.js"></script><script defer src="../../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-77dede896d6ac08e.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `halo2_proofs/src/dev/cost_model.rs`."><title>cost_model.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-e883e87179a81222.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="halo2_proofs" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0-nightly (eeff92ad3 2023-12-13)" data-channel="nightly" data-search-js="search-ec029af4ec3ae4df.js" data-settings-js="settings-fe03fdc259827cd2.js" ><script src="../../../static.files/storage-bc37acceda91d44a.js"></script><script defer src="../../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-77dede896d6ac08e.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js"                  integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/contrib/auto-render.min.js"    integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous"></script>
 <script>
@@ -349,54 +349,31 @@
 <a href="#334" id="334">334</a>
 <a href="#335" id="335">335</a>
 <a href="#336" id="336">336</a>
-<a href="#337" id="337">337</a>
-<a href="#338" id="338">338</a>
-<a href="#339" id="339">339</a>
-<a href="#340" id="340">340</a>
-<a href="#341" id="341">341</a>
-<a href="#342" id="342">342</a>
-<a href="#343" id="343">343</a>
-<a href="#344" id="344">344</a>
-<a href="#345" id="345">345</a>
-<a href="#346" id="346">346</a>
-<a href="#347" id="347">347</a>
-<a href="#348" id="348">348</a>
-<a href="#349" id="349">349</a>
-<a href="#350" id="350">350</a>
-<a href="#351" id="351">351</a>
-<a href="#352" id="352">352</a>
-<a href="#353" id="353">353</a>
-<a href="#354" id="354">354</a>
-<a href="#355" id="355">355</a>
-<a href="#356" id="356">356</a>
-<a href="#357" id="357">357</a>
-<a href="#358" id="358">358</a>
-<a href="#359" id="359">359</a>
-<a href="#360" id="360">360</a>
-<a href="#361" id="361">361</a>
-<a href="#362" id="362">362</a>
-<a href="#363" id="363">363</a>
-<a href="#364" id="364">364</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! The cost estimator takes high-level parameters for a circuit design, and estimates the
 //! verification cost, as well as resulting proof size.
 
-</span><span class="kw">use </span>std::{cmp, iter, num::ParseIntError, str::FromStr};
+</span><span class="kw">use </span>std::collections::HashSet;
+<span class="kw">use </span>std::{iter, num::ParseIntError, str::FromStr};
 
 <span class="kw">use </span><span class="kw">crate</span>::plonk::Circuit;
 <span class="kw">use </span>ff::{Field, FromUniformBytes};
+<span class="kw">use </span>serde::Deserialize;
+<span class="kw">use </span>serde_derive::Serialize;
 
 <span class="kw">use </span><span class="kw">super</span>::MockProver;
 
 <span class="doccomment">/// Supported commitment schemes
-</span><span class="attr">#[derive(Debug)]
+</span><span class="attr">#[derive(Debug, Eq, PartialEq)]
 </span><span class="kw">pub enum </span>CommitmentScheme {
     <span class="doccomment">/// Inner Product Argument commitment scheme
     </span>IPA,
-    <span class="doccomment">/// KZG commitment scheme
-    </span>KZG,
+    <span class="doccomment">/// KZG with GWC19 mutli-open strategy
+    </span>KZGGWC,
+    <span class="doccomment">/// KZG with BDFG20 mutli-open strategy
+    </span>KZGSHPLONK,
 }
 
-<span class="doccomment">/// Options to build a circuit specifiction to measure the cost model of.
+<span class="doccomment">/// Options to build a circuit specification to measure the cost model of.
 </span><span class="attr">#[derive(Debug)]
 </span><span class="kw">pub struct </span>CostOptions {
     <span class="doccomment">/// An advice column with the given rotations. May be repeated.
@@ -411,11 +388,17 @@
     <span class="doccomment">/// Maximum degree of the custom gates.
     </span><span class="kw">pub </span>gate_degree: usize,
 
+    <span class="doccomment">/// Maximum degree of the constraint system.
+    </span><span class="kw">pub </span>max_degree: usize,
+
     <span class="doccomment">/// A lookup over N columns with max input degree I and max table degree T. May be repeated.
     </span><span class="kw">pub </span>lookup: Vec&lt;Lookup&gt;,
 
     <span class="doccomment">/// A permutation over N columns. May be repeated.
     </span><span class="kw">pub </span>permutation: Vec&lt;Permutation&gt;,
+
+    <span class="doccomment">/// A shuffle over N columns with max input degree I and max shuffle degree T. May be repeated.
+    </span><span class="kw">pub </span>shuffle: Vec&lt;Shuffle&gt;,
 
     <span class="doccomment">/// 2^K bound on the number of rows.
     </span><span class="kw">pub </span>k: usize,
@@ -441,33 +424,9 @@
 
 <span class="doccomment">/// Structure holding the Lookup related data for circuit benchmarks.
 </span><span class="attr">#[derive(Debug, Clone)]
-</span><span class="kw">pub struct </span>Lookup {
-    _columns: usize,
-    input_deg: usize,
-    table_deg: usize,
-}
-
-<span class="kw">impl </span>FromStr <span class="kw">for </span>Lookup {
-    <span class="kw">type </span><span class="prelude-val">Err </span>= ParseIntError;
-
-    <span class="kw">fn </span>from_str(s: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Err&gt; {
-        <span class="kw">let </span><span class="kw-2">mut </span>parts = s.split(<span class="string">','</span>);
-        <span class="kw">let </span>_columns = parts.next().unwrap().parse()<span class="question-mark">?</span>;
-        <span class="kw">let </span>input_deg = parts.next().unwrap().parse()<span class="question-mark">?</span>;
-        <span class="kw">let </span>table_deg = parts.next().unwrap().parse()<span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(Lookup {
-            _columns,
-            input_deg,
-            table_deg,
-        })
-    }
-}
+</span><span class="kw">pub struct </span>Lookup;
 
 <span class="kw">impl </span>Lookup {
-    <span class="kw">fn </span>required_degree(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
-        <span class="number">2 </span>+ cmp::max(<span class="number">1</span>, <span class="self">self</span>.input_deg) + cmp::max(<span class="number">1</span>, <span class="self">self</span>.table_deg)
-    }
-
     <span class="kw">fn </span>queries(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = Poly&gt; {
         <span class="comment">// - product commitments at x and x_inv
         // - input commitments at x and x_inv
@@ -484,7 +443,7 @@
 }
 
 <span class="doccomment">/// Number of permutation enabled columns
-</span><span class="attr">#[derive(Debug, Clone)]
+</span><span class="attr">#[derive(Debug, Clone, Deserialize, Serialize)]
 </span><span class="kw">pub struct </span>Permutation {
     columns: usize,
 }
@@ -500,10 +459,6 @@
 }
 
 <span class="kw">impl </span>Permutation {
-    <span class="kw">fn </span>required_degree(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
-        cmp::max(<span class="self">self</span>.columns + <span class="number">1</span>, <span class="number">2</span>)
-    }
-
     <span class="kw">fn </span>queries(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = Poly&gt; {
         <span class="comment">// - product commitments at x and x_inv
         // - polynomial commitments at x
@@ -516,8 +471,20 @@
     }
 }
 
+<span class="doccomment">/// Structure holding the [Shuffle] related data for circuit benchmarks.
+</span><span class="attr">#[derive(Debug, Clone)]
+</span><span class="kw">pub struct </span>Shuffle;
+
+<span class="kw">impl </span>Shuffle {
+    <span class="kw">fn </span>queries(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = Poly&gt; {
+        <span class="kw">let </span>shuffle = <span class="string">"0, 1"</span>.parse().unwrap();
+
+        iter::empty().chain(<span class="prelude-val">Some</span>(shuffle))
+    }
+}
+
 <span class="doccomment">/// High-level specifications of an abstract circuit.
-</span><span class="attr">#[derive(Debug)]
+</span><span class="attr">#[derive(Debug, Deserialize, Serialize)]
 </span><span class="kw">pub struct </span>ModelCircuit {
     <span class="doccomment">/// Power-of-2 bound on the number of rows in the circuit.
     </span><span class="kw">pub </span>k: usize,
@@ -529,30 +496,32 @@
     </span><span class="kw">pub </span>lookups: usize,
     <span class="doccomment">/// Equality constraint permutation arguments.
     </span><span class="kw">pub </span>permutations: Vec&lt;Permutation&gt;,
+    <span class="doccomment">/// Number of shuffle arguments
+    </span><span class="kw">pub </span>shuffles: usize,
     <span class="doccomment">/// Number of distinct column queries across all gates.
     </span><span class="kw">pub </span>column_queries: usize,
     <span class="doccomment">/// Number of distinct sets of points in the multiopening argument.
     </span><span class="kw">pub </span>point_sets: usize,
+    <span class="doccomment">/// Size of the proof for the circuit
+    </span><span class="kw">pub </span>size: usize,
 }
 
-<span class="kw">impl </span>From&lt;CostOptions&gt; <span class="kw">for </span>ModelCircuit {
-    <span class="kw">fn </span>from(opts: CostOptions) -&gt; <span class="self">Self </span>{
-        <span class="kw">let </span>max_deg = [<span class="number">1</span>, opts.gate_degree]
-            .iter()
-            .cloned()
-            .chain(opts.lookup.iter().map(|l| l.required_degree()))
-            .chain(opts.permutation.iter().map(|p| p.required_degree()))
-            .max()
-            .unwrap();
-
+<span class="kw">impl </span>CostOptions {
+    <span class="doccomment">/// Convert [CostOptions] to [ModelCircuit]. The proof sizè is computed depending on the base
+    /// and scalar field size of the curve used, together with the [CommitmentScheme].
+    </span><span class="kw">pub fn </span>into_model_circuit&lt;<span class="kw">const </span>COMM: usize, <span class="kw">const </span>SCALAR: usize&gt;(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        comm_scheme: CommitmentScheme,
+    ) -&gt; ModelCircuit {
         <span class="kw">let </span><span class="kw-2">mut </span>queries: Vec&lt;<span class="kw">_</span>&gt; = iter::empty()
-            .chain(opts.advice.iter())
-            .chain(opts.instance.iter())
-            .chain(opts.fixed.iter())
+            .chain(<span class="self">self</span>.advice.iter())
+            .chain(<span class="self">self</span>.instance.iter())
+            .chain(<span class="self">self</span>.fixed.iter())
             .cloned()
-            .chain(opts.lookup.iter().flat_map(|l| l.queries()))
-            .chain(opts.permutation.iter().flat_map(|p| p.queries()))
-            .chain(iter::repeat(<span class="string">"0"</span>.parse().unwrap()).take(max_deg - <span class="number">1</span>))
+            .chain(<span class="self">self</span>.lookup.iter().flat_map(|l| l.queries()))
+            .chain(<span class="self">self</span>.permutation.iter().flat_map(|p| p.queries()))
+            .chain(<span class="self">self</span>.shuffle.iter().flat_map(|s| s.queries()))
+            .chain(iter::repeat(<span class="string">"0"</span>.parse().unwrap()).take(<span class="self">self</span>.max_degree - <span class="number">1</span>))
             .collect();
 
         <span class="kw">let </span>column_queries = queries.len();
@@ -560,49 +529,32 @@
         queries.dedup();
         <span class="kw">let </span>point_sets = queries.len();
 
-        ModelCircuit {
-            k: opts.k,
-            max_deg,
-            advice_columns: opts.advice.len(),
-            lookups: opts.lookup.len(),
-            permutations: opts.permutation,
-            column_queries,
-            point_sets,
-        }
-    }
-}
-
-<span class="kw">impl </span>ModelCircuit {
-    <span class="doccomment">/// Size of the proof in bytes
-    </span><span class="kw">pub fn </span>proof_size&lt;<span class="kw">const </span>COMM: usize, <span class="kw">const </span>SCALAR: usize&gt;(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        comm_scheme: CommitmentScheme,
-    ) -&gt; usize {
-        <span class="kw">let </span>size = |points: usize, scalars: usize| points * COMM + scalars * SCALAR;
+        <span class="kw">let </span>comp_bytes = |points: usize, scalars: usize| points * COMM + scalars * SCALAR;
 
         <span class="comment">// PLONK:
         // - COMM bytes (commitment) per advice column
-        // - 3 * COMM bytes (commitments) + 5 * SCALAR bytes (evals) per lookup argument
+        // - 3 * COMM bytes (commitments) + 5 * SCALAR bytes (evals) per lookup column
         // - COMM bytes (commitment) + 2 * SCALAR bytes (evals) per permutation argument
         // - COMM bytes (eval) per column per permutation argument
-        </span><span class="kw">let </span>plonk = size(<span class="number">1</span>, <span class="number">0</span>) * <span class="self">self</span>.advice_columns
-            + size(<span class="number">3</span>, <span class="number">5</span>) * <span class="self">self</span>.lookups
+        </span><span class="kw">let </span>plonk = comp_bytes(<span class="number">1</span>, <span class="number">0</span>) * <span class="self">self</span>.advice.len()
+            + comp_bytes(<span class="number">3</span>, <span class="number">5</span>) * <span class="self">self</span>.lookup.len()
             + <span class="self">self
-                </span>.permutations
+                </span>.permutation
                 .iter()
-                .map(|p| size(<span class="number">1</span>, <span class="number">2 </span>+ p.columns))
+                .map(|p| comp_bytes(<span class="number">1</span>, <span class="number">2 </span>+ p.columns))
                 .sum::&lt;usize&gt;();
 
         <span class="comment">// Vanishing argument:
         // - (max_deg - 1) * COMM bytes (commitments) + (max_deg - 1) * SCALAR bytes (h_evals)
         //   for quotient polynomial
         // - SCALAR bytes (eval) per column query
-        </span><span class="kw">let </span>vanishing = size(<span class="self">self</span>.max_deg - <span class="number">1</span>, <span class="self">self</span>.max_deg - <span class="number">1</span>) + size(<span class="number">0</span>, <span class="self">self</span>.column_queries);
+        </span><span class="kw">let </span>vanishing =
+            comp_bytes(<span class="self">self</span>.max_degree - <span class="number">1</span>, <span class="self">self</span>.max_degree - <span class="number">1</span>) + comp_bytes(<span class="number">0</span>, column_queries);
 
         <span class="comment">// Multiopening argument:
         // - f_commitment (COMM bytes)
         // - SCALAR bytes (evals) per set of points in multiopen argument
-        </span><span class="kw">let </span>multiopen = size(<span class="number">1</span>, <span class="self">self</span>.point_sets);
+        </span><span class="kw">let </span>multiopen = comp_bytes(<span class="number">1</span>, point_sets);
 
         <span class="kw">let </span>polycomm = <span class="kw">match </span>comm_scheme {
             CommitmentScheme::IPA =&gt; {
@@ -611,67 +563,61 @@
                 // - inner product argument (k rounds * 2 * COMM bytes)
                 // - a (SCALAR bytes)
                 // - xi (SCALAR bytes)
-                </span>size(<span class="number">1 </span>+ <span class="number">2 </span>* <span class="self">self</span>.k, <span class="number">2</span>)
+                </span>comp_bytes(<span class="number">1 </span>+ <span class="number">2 </span>* <span class="self">self</span>.k, <span class="number">2</span>)
             }
-            CommitmentScheme::KZG =&gt; {
-                <span class="comment">// Polycommit KZG:
+            CommitmentScheme::KZGGWC =&gt; {
+                <span class="kw">let </span><span class="kw-2">mut </span>nr_rotations = HashSet::new();
+                <span class="kw">for </span>poly <span class="kw">in </span><span class="self">self</span>.advice.iter() {
+                    nr_rotations.extend(poly.rotations.clone());
+                }
+                <span class="kw">for </span>poly <span class="kw">in </span><span class="self">self</span>.fixed.iter() {
+                    nr_rotations.extend(poly.rotations.clone());
+                }
+                <span class="kw">for </span>poly <span class="kw">in </span><span class="self">self</span>.instance.iter() {
+                    nr_rotations.extend(poly.rotations.clone());
+                }
+
+                <span class="comment">// Polycommit GWC:
+                // - number_rotations * COMM bytes
+                </span>comp_bytes(nr_rotations.len(), <span class="number">0</span>)
+            }
+            CommitmentScheme::KZGSHPLONK =&gt; {
+                <span class="comment">// Polycommit SHPLONK:
                 // - quotient polynomial commitment (COMM bytes)
-                </span>size(<span class="number">1</span>, <span class="number">0</span>)
+                </span>comp_bytes(<span class="number">1</span>, <span class="number">0</span>)
             }
         };
 
-        plonk + vanishing + multiopen + polycomm
-    }
+        <span class="kw">let </span>size = plonk + vanishing + multiopen + polycomm;
 
-    <span class="doccomment">/// Generate a report.
-    </span><span class="kw">pub fn </span>report&lt;<span class="kw">const </span>COMM: usize, <span class="kw">const </span>SCALAR: usize&gt;(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        comm_scheme: CommitmentScheme,
-    ) -&gt; String {
-        <span class="kw">let </span><span class="kw-2">mut </span>str = String::new();
-        str.push_str(<span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">"{:#?}"</span>, <span class="self">self</span>));
-        str.push_str(<span class="kw-2">&amp;</span><span class="macro">format!</span>(
-            <span class="string">"Proof size: {} bytes"</span>,
-            <span class="self">self</span>.proof_size::&lt;COMM, SCALAR&gt;(comm_scheme)
-        ));
-        str
-    }
-
-    <span class="doccomment">/// Write a CSV report
-    </span><span class="kw">pub fn </span>report_csv&lt;<span class="kw">const </span>COMM: usize, <span class="kw">const </span>SCALAR: usize, W: std::io::Write&gt;(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        w: <span class="kw-2">&amp;mut </span>W,
-        comm_scheme: CommitmentScheme,
-    ) -&gt; std::io::Result&lt;()&gt; {
-        <span class="kw">let </span><span class="kw-2">mut </span>w = csv::Writer::from_writer(w);
-        w.write_record([<span class="string">"max_deg"</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.max_deg.to_string()])<span class="question-mark">?</span>;
-        w.write_record([<span class="string">"advice_columns"</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.advice_columns.to_string()])<span class="question-mark">?</span>;
-        w.write_record([<span class="string">"lookups"</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.lookups.to_string()])<span class="question-mark">?</span>;
-        w.write_record([<span class="string">"permutations"</span>, <span class="kw-2">&amp;</span>{
-            <span class="kw">let </span><span class="kw-2">mut </span>str = String::new();
-            <span class="kw">for </span>p <span class="kw">in </span><span class="self">self</span>.permutations.iter() {
-                str.push_str(<span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">" {}"</span>, p.columns));
-            }
-            str
-        }])<span class="question-mark">?</span>;
-        w.write_record([<span class="string">"column_queries"</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.column_queries.to_string()])<span class="question-mark">?</span>;
-        w.write_record([<span class="string">"point_sets"</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.point_sets.to_string()])<span class="question-mark">?</span>;
-        w.write_record([
-            <span class="string">"proof_size"</span>,
-            <span class="kw-2">&amp;</span><span class="self">self</span>.proof_size::&lt;COMM, SCALAR&gt;(comm_scheme).to_string(),
-        ])<span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(())
+        ModelCircuit {
+            k: <span class="self">self</span>.k,
+            max_deg: <span class="self">self</span>.max_degree,
+            advice_columns: <span class="self">self</span>.advice.len(),
+            lookups: <span class="self">self</span>.lookup.len(),
+            permutations: <span class="self">self</span>.permutation.clone(),
+            shuffles: <span class="self">self</span>.shuffle.len(),
+            column_queries,
+            point_sets,
+            size,
+        }
     }
 }
 
 <span class="doccomment">/// Given a Plonk circuit, this function returns a [ModelCircuit]
-</span><span class="kw">pub fn </span>from_circuit_to_model_circuit&lt;F: Ord + Field + FromUniformBytes&lt;<span class="number">64</span>&gt;, C: Circuit&lt;F&gt;&gt;(
+</span><span class="kw">pub fn </span>from_circuit_to_model_circuit&lt;
+    F: Ord + Field + FromUniformBytes&lt;<span class="number">64</span>&gt;,
+    C: Circuit&lt;F&gt;,
+    <span class="kw">const </span>COMM: usize,
+    <span class="kw">const </span>SCALAR: usize,
+&gt;(
     k: u32,
     circuit: <span class="kw-2">&amp;</span>C,
     instances: Vec&lt;Vec&lt;F&gt;&gt;,
+    comm_scheme: CommitmentScheme,
 ) -&gt; ModelCircuit {
     <span class="kw">let </span>options = from_circuit_to_cost_model_options(k, circuit, instances);
-    ModelCircuit::from(options)
+    options.into_model_circuit::&lt;COMM, SCALAR&gt;(comm_scheme)
 }
 
 <span class="doccomment">/// Given a Plonk circuit, this function returns [CostOptions]
@@ -710,24 +656,20 @@
         instance
     };
 
-    <span class="kw">let </span>lookup = {
-        <span class="kw">let </span><span class="kw-2">mut </span>lookup = <span class="macro">vec!</span>[];
-        <span class="kw">for </span>l <span class="kw">in </span>cs.lookups().iter() {
-            lookup.push(Lookup {
-                <span class="comment">// this isn't actually used for estimation right now, so ignore it.
-                </span>_columns: <span class="number">1</span>,
-                input_deg: l.input_expressions().len(),
-                table_deg: l.table_expressions().len(),
-            });
-        }
-        lookup
-    };
+    <span class="kw">let </span>lookup = { cs.lookups().iter().map(|<span class="kw">_</span>| Lookup).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;() };
 
     <span class="kw">let </span>permutation = <span class="macro">vec!</span>[Permutation {
         columns: cs.permutation().get_columns().len(),
     }];
 
-    <span class="kw">let </span>gate_degree = cs.degree();
+    <span class="kw">let </span>shuffle = { cs.shuffles.iter().map(|<span class="kw">_</span>| Shuffle).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;() };
+
+    <span class="kw">let </span>gate_degree = cs
+        .gates
+        .iter()
+        .flat_map(|gate| gate.polynomials().iter().map(|poly| poly.degree()))
+        .max()
+        .unwrap_or(<span class="number">0</span>);
 
     <span class="kw">let </span>k = prover.k.try_into().unwrap();
 
@@ -736,8 +678,10 @@
         instance,
         fixed,
         gate_degree,
+        max_degree: cs.degree(),
         lookup,
         permutation,
+        shuffle,
         k,
     }
 }
