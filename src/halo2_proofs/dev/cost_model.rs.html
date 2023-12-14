@@ -340,15 +340,6 @@
 <a href="#325" id="325">325</a>
 <a href="#326" id="326">326</a>
 <a href="#327" id="327">327</a>
-<a href="#328" id="328">328</a>
-<a href="#329" id="329">329</a>
-<a href="#330" id="330">330</a>
-<a href="#331" id="331">331</a>
-<a href="#332" id="332">332</a>
-<a href="#333" id="333">333</a>
-<a href="#334" id="334">334</a>
-<a href="#335" id="335">335</a>
-<a href="#336" id="336">336</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! The cost estimator takes high-level parameters for a circuit design, and estimates the
 //! verification cost, as well as resulting proof size.
 
@@ -428,10 +419,10 @@
 
 <span class="kw">impl </span>Lookup {
     <span class="kw">fn </span>queries(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = Poly&gt; {
-        <span class="comment">// - product commitments at x and x_inv
+        <span class="comment">// - product commitments at x and \omega x
         // - input commitments at x and x_inv
         // - table commitments at x
-        </span><span class="kw">let </span>product = <span class="string">"0,-1"</span>.parse().unwrap();
+        </span><span class="kw">let </span>product = <span class="string">"0,1"</span>.parse().unwrap();
         <span class="kw">let </span>input = <span class="string">"0,-1"</span>.parse().unwrap();
         <span class="kw">let </span>table = <span class="string">"0"</span>.parse().unwrap();
 
@@ -446,16 +437,6 @@
 </span><span class="attr">#[derive(Debug, Clone, Deserialize, Serialize)]
 </span><span class="kw">pub struct </span>Permutation {
     columns: usize,
-}
-
-<span class="kw">impl </span>FromStr <span class="kw">for </span>Permutation {
-    <span class="kw">type </span><span class="prelude-val">Err </span>= ParseIntError;
-
-    <span class="kw">fn </span>from_str(s: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Err&gt; {
-        <span class="prelude-val">Ok</span>(Permutation {
-            columns: s.parse()<span class="question-mark">?</span>,
-        })
-    }
 }
 
 <span class="kw">impl </span>Permutation {
@@ -477,7 +458,8 @@
 
 <span class="kw">impl </span>Shuffle {
     <span class="kw">fn </span>queries(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = Poly&gt; {
-        <span class="kw">let </span>shuffle = <span class="string">"0, 1"</span>.parse().unwrap();
+        <span class="comment">// Open shuffle product commitment at x and \omega x
+        </span><span class="kw">let </span>shuffle = <span class="string">"0, 1"</span>.parse().unwrap();
 
         iter::empty().chain(<span class="prelude-val">Some</span>(shuffle))
     }
