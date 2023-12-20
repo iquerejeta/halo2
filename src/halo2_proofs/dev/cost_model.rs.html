@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `halo2_proofs/src/dev/cost_model.rs`."><title>cost_model.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-804b98a1284a310a.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="halo2_proofs" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0-nightly (3f28fe133 2023-12-18)" data-channel="nightly" data-search-js="search-2b6ce74ff89ae146.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../../static.files/storage-f2adc0d6ca4d09fb.js"></script><script defer src="../../../static.files/src-script-39ed315d46fb705f.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-305769736d49e732.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-feafe1bb7466e4bd.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `halo2_proofs/src/dev/cost_model.rs`."><title>cost_model.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-804b98a1284a310a.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="halo2_proofs" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0-nightly (f704f3b93 2023-12-19)" data-channel="nightly" data-search-js="search-2b6ce74ff89ae146.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../../static.files/storage-f2adc0d6ca4d09fb.js"></script><script defer src="../../../static.files/src-script-39ed315d46fb705f.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-305769736d49e732.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-feafe1bb7466e4bd.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js"                  integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/contrib/auto-render.min.js"    integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous"></script>
 <script>
@@ -337,11 +337,6 @@
 <a href="#321" id="321">321</a>
 <a href="#322" id="322">322</a>
 <a href="#323" id="323">323</a>
-<a href="#324" id="324">324</a>
-<a href="#325" id="325">325</a>
-<a href="#326" id="326">326</a>
-<a href="#327" id="327">327</a>
-<a href="#328" id="328">328</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! The cost estimator takes high-level parameters for a circuit design, and estimates the
 //! verification cost, as well as resulting proof size.
 
@@ -388,7 +383,7 @@
     </span><span class="kw">pub </span>lookup: Vec&lt;Lookup&gt;,
 
     <span class="doccomment">/// A permutation over N columns. May be repeated.
-    </span><span class="kw">pub </span>permutation: Vec&lt;Permutation&gt;,
+    </span><span class="kw">pub </span>permutation: Permutation,
 
     <span class="doccomment">/// A shuffle over N columns with max input degree I and max shuffle degree T. May be repeated.
     </span><span class="kw">pub </span>shuffle: Vec&lt;Shuffle&gt;,
@@ -438,8 +433,7 @@
 <span class="doccomment">/// Number of permutation enabled columns
 </span><span class="attr">#[derive(Debug, Clone, Deserialize, Serialize)]
 </span><span class="kw">pub struct </span>Permutation {
-    <span class="doccomment">/// Number of columns
-    </span><span class="kw">pub </span>columns: usize,
+    columns: usize,
 }
 
 <span class="kw">impl </span>Permutation {
@@ -479,8 +473,8 @@
     </span><span class="kw">pub </span>advice_columns: usize,
     <span class="doccomment">/// Number of lookup arguments.
     </span><span class="kw">pub </span>lookups: usize,
-    <span class="doccomment">/// Equality constraint permutation arguments.
-    </span><span class="kw">pub </span>permutations: Vec&lt;Permutation&gt;,
+    <span class="doccomment">/// Equality constraint enabled columns.
+    </span><span class="kw">pub </span>permutations: usize,
     <span class="doccomment">/// Number of shuffle arguments
     </span><span class="kw">pub </span>shuffles: usize,
     <span class="doccomment">/// Number of distinct column queries across all gates.
@@ -504,7 +498,7 @@
             .chain(<span class="self">self</span>.fixed.iter())
             .cloned()
             .chain(<span class="self">self</span>.lookup.iter().flat_map(|l| l.queries()))
-            .chain(<span class="self">self</span>.permutation.iter().flat_map(|p| p.queries()))
+            .chain(<span class="self">self</span>.permutation.queries())
             .chain(<span class="self">self</span>.shuffle.iter().flat_map(|s| s.queries()))
             .chain(iter::repeat(<span class="string">"0"</span>.parse().unwrap()).take(<span class="self">self</span>.max_degree - <span class="number">1</span>))
             .collect();
@@ -523,11 +517,7 @@
         // - COMM bytes (eval) per column per permutation argument
         </span><span class="kw">let </span>plonk = comp_bytes(<span class="number">1</span>, <span class="number">0</span>) * <span class="self">self</span>.advice.len()
             + comp_bytes(<span class="number">3</span>, <span class="number">5</span>) * <span class="self">self</span>.lookup.len()
-            + <span class="self">self
-                </span>.permutation
-                .iter()
-                .map(|p| comp_bytes(<span class="number">1</span>, <span class="number">2 </span>+ p.columns))
-                .sum::&lt;usize&gt;();
+            + comp_bytes(<span class="number">1</span>, <span class="number">2 </span>+ <span class="self">self</span>.permutation.columns);
 
         <span class="comment">// Vanishing argument:
         // - (max_deg - 1) * COMM bytes (commitments) + (max_deg - 1) * SCALAR bytes (h_evals)
@@ -580,7 +570,7 @@
             max_deg: <span class="self">self</span>.max_degree,
             advice_columns: <span class="self">self</span>.advice.len(),
             lookups: <span class="self">self</span>.lookup.len(),
-            permutations: <span class="self">self</span>.permutation.clone(),
+            permutations: <span class="self">self</span>.permutation.columns,
             shuffles: <span class="self">self</span>.shuffle.len(),
             column_queries,
             point_sets,
@@ -643,9 +633,9 @@
 
     <span class="kw">let </span>lookup = { cs.lookups().iter().map(|<span class="kw">_</span>| Lookup).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;() };
 
-    <span class="kw">let </span>permutation = <span class="macro">vec!</span>[Permutation {
+    <span class="kw">let </span>permutation = Permutation {
         columns: cs.permutation().get_columns().len(),
-    }];
+    };
 
     <span class="kw">let </span>shuffle = { cs.shuffles.iter().map(|<span class="kw">_</span>| Shuffle).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;() };
 
